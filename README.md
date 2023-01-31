@@ -1,3 +1,5 @@
-# Crux Project Team 5
+# Crux Project Team 5 Prosthetic Arm Control by Human Brain
 
-write a summary for our project
+### Team Lead: Rachel Ki, Team Members: Nathan C., Shane C., Nishad E.,  Ben F., Danielle F., Katharine J., Ayesha M., Darren N.
+
+Project Description:
