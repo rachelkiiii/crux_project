@@ -2,8 +2,8 @@
 
 ## Prosthetic arm controlled by human brain
 
-*** Team Lead: Rachel K. ***
-*** Team Members: Nathan C., Shane C., Nishad E., Ben F., Danielle F., Katharine J., Ayesha M., Darren N. ***
+***Team Lead: Rachel K.***
+***Team Members: Nathan C., Shane C., Nishad E., Ben F., Danielle F., Katharine J., Ayesha M., Darren N.***
 
 ## Table of contents
 1. Narrative
