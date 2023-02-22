@@ -19,7 +19,7 @@
 <img width="260" alt="Screen Shot 2023-02-12 at 4 24 28 PM" src="https://user-images.githubusercontent.com/114251753/218346392-7fd34828-4542-419e-93c9-706ec1cc8eb8.png">
 
 ### Data Flow Diagram
-<img width="300" alt="Screen Shot 2023-02-21 at 5 34 54 PM" src="https://user-images.githubusercontent.com/114251753/220498205-1b59a3e2-b3f3-41e9-94eb-ec6cd30c0add.png">
+<img width="2000" alt="Screen Shot 2023-02-21 at 5 34 54 PM" src="https://user-images.githubusercontent.com/114251753/220498205-1b59a3e2-b3f3-41e9-94eb-ec6cd30c0add.png">
 
 
 #### 1. Narrative
