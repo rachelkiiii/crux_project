@@ -19,7 +19,8 @@
 <img width="260" alt="Screen Shot 2023-02-12 at 4 24 28 PM" src="https://user-images.githubusercontent.com/114251753/218346392-7fd34828-4542-419e-93c9-706ec1cc8eb8.png">
 
 ### Data Flow Diagram
-<img width="586" alt="Screen Shot 2023-02-12 at 4 25 48 PM" src="https://user-images.githubusercontent.com/114251753/218346457-5eaaa9cd-5d9d-481a-b194-0ccff8bc0a27.png">
+<img width="231" alt="Screen Shot 2023-02-21 at 5 34 54 PM" src="https://user-images.githubusercontent.com/114251753/220498205-1b59a3e2-b3f3-41e9-94eb-ec6cd30c0add.png">
+
 
 #### 1. Narrative
 Robotic arms are needed for some individuals who suffer from physical disabilities with the lost ability to freely control their muscles. Although there are robotic arms that are already developed for use, it is crucial for further study and development of prosthetic arms for advancement of robotic arms with a reasonable cost for people in need. In this research, we will demonstrate moving a prosthetic arm controlled by the human brain through BCI (Brain Computer Interface). BCI is based on electroencephalography (EEG), which uses electrical brain activity using small electrodes attached to the scalp.
