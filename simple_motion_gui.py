@@ -2,6 +2,19 @@
 ## Later on I can intermesh this code with the BCI 2000 software so this runs as data is being collected; we could possibly annotate the data WHILE the experiment is running.
 
 import pygame, time, pickle
+from brainflow.board_shim import BoardShim, BrainFlowInputParams, BoardIds
+import time
+
+## SETUP DATA COLLECTION
+
+BoardShim.enable_dev_board_logger()
+params = BrainFlowInputParams()
+params.ip_port = 6677
+params.ip_port_aux = 6678
+params.ip_address = "225.1.1.1"
+params.ip_address_aux = "225.1.1.1"
+params.master_board = BoardIds.SYNTHETIC_BOARD
+board = BoardShim(BoardIds.SYNTHETIC_BOARD, params)
 
 ## DEFINE CONSTANTS
 
@@ -35,12 +48,22 @@ class Event:
 loop_timestamp = time.time()
 init_time = time.time()
 
-event_log = [Event(timestamp=0, event_type='START_OF_TRIAL')]
-key_log = [Event(timestamp=0, event_type='START_OF_TRIAL')]
+event_log = [Event(timestamp=time.time(), event_type='START_OF_TRIAL')]
+data_log = []
+
+## START STREAM
+
+board.prepare_session()
+board.start_stream()
 
 ## MAIN LOOP
 
 while running:
+    # Gather data asynchronously
+    data = board.get_board_data(256)
+    if data.size > 0:
+        data_log.append({'time': time.time(), 'data': data})
+
     screen.fill(white)
     
     # Intro Message
@@ -149,23 +172,29 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.KEYDOWN:
-            key_log.append(Event(timestamp=time.time()-init_time, event_type='KEY_PRESS', key=event.key))
 
 event_log.append(Event(timestamp=0, event_type='END_OF_TRIAL'))
-key_log.append(Event(timestamp=0, event_type='END_OF_TRIAL'))
 
-## PRINT OUT THE RESULTS
-
-print("EVENT LOG")
-for event in event_log:
-    print(f'Event Time: {event.timestamp}, Event Type: {event.type}, Event task: {event.task}')
-
-print("KEY LOG")
-for event in key_log:
-    print(f'Event Time: {event.timestamp}, Event Type: {event.type}, Key Type: {event.key}')
+# Conclude stream
+board.stop_stream()
 
 ## SAVE FILE
 
 with open('motion_gui_logs.pickle', 'wb') as handle:
-    pickle.dump({'EVENT_LOG': event_log, 'KEY_LOG': key_log}, handle)
+    pickle.dump({'EVENT_LOG': event_log, 'DATA_LOG': data_log}, handle)
+"""
+
+import pickle
+
+class Event:
+    def __init__(self, timestamp, event_type, task=None, key=None):
+        self.timestamp = timestamp
+        self.type = event_type
+        self.task = task
+        self.key = key
+
+all_logs = pickle.load(open('motion_gui_logs.pickle', 'rb'))
+
+print(all_logs)
+
+""
