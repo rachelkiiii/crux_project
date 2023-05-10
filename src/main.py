@@ -88,80 +88,76 @@ board.start_stream()
 ## MAIN LOOP
 
 while running:
-    # Gather data asynchronously
-    data = board.get_board_data(256)
-    if data.size > 0:
-        data_log.append({'time': time.time(), 'data': data})
+    try:
+        # Gather data asynchronously
+        data = board.get_board_data(256)
+        if data.size > 0:
+            data_log.append({'time': time.time(), 'data': data})
 
-    screen.fill(WHITE)
-    
-    # Intro Message
-    if (time.time() - loop_timestamp) < 1 and not intro_passed:
-        font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render('Please fixate on the following cross until trials begin.', True, BLACK)
-        textRect = text.get_rect()
-        textRect.center = (WIDTH // 2, HEIGHT // 2)
-        screen.blit(text, textRect)
-        if event_log[-1].type != 'INTRO' :
-            event_log.append(Event(timestamp=time.time(), event_type='INTRO'))
+        screen.fill(WHITE)
+        
+        # Intro Message
+        if (time.time() - loop_timestamp) < 1 and not intro_passed:
+            font = pygame.font.Font('freesansbold.ttf', 32)
+            text = font.render('Please fixate on the following cross until trials begin.', True, BLACK)
+            textRect = text.get_rect()
+            textRect.center = (WIDTH // 2, HEIGHT // 2)
+            screen.blit(text, textRect)
+            if event_log[-1].type != 'INTRO' :
+                event_log.append(Event(timestamp=time.time(), event_type='INTRO'))
 
-    # Cross pattern to focus subject
-    elif (time.time() - loop_timestamp) < 3:
-        pygame.draw.rect(screen, BLACK, pygame.Rect(WIDTH/2 - 10, HEIGHT/2 - 50, 20, 100))
-        pygame.draw.rect(screen, BLACK, pygame.Rect(WIDTH/2 - 50, HEIGHT/2 - 10, 100, 20))
-        if event_log[-1].task != 'WAIT':
-            event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='WAIT'))
-    
-    # Arrow pointing left
-    elif (time.time() - loop_timestamp) < 6:
-        point_left()
-        if event_log[-1].task != 'LEFT':
-            event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='LEFT'))
+        # Cross pattern to focus subject
+        elif (time.time() - loop_timestamp) < 3:
+            pygame.draw.rect(screen, BLACK, pygame.Rect(WIDTH/2 - 10, HEIGHT/2 - 50, 20, 100))
+            pygame.draw.rect(screen, BLACK, pygame.Rect(WIDTH/2 - 50, HEIGHT/2 - 10, 100, 20))
+            if event_log[-1].task != 'WAIT':
+                event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='WAIT'))
+        
+        # Arrow pointing left
+        elif (time.time() - loop_timestamp) < 6:
+            point_left()
+            if event_log[-1].task != 'LEFT':
+                event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='LEFT'))
 
-    # Arrow pointing right
-    elif (time.time() - loop_timestamp) < 9:
-        point_right()
-        if event_log[-1].task != 'RIGHT':
-            event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='RIGHT'))
-   
-   # Arrow pointing up
-    elif (time.time() - loop_timestamp) < 12:
-        point_up()
-        if event_log[-1].task != 'UP':
-            event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='UP'))
-   
-    # Arrow pointing down
-    elif (time.time() - loop_timestamp) < 15:
-        point_down()
-        if event_log[-1].task != 'DOWN':
-            event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='DOWN'))
-   
-   #Two Arrows for both hands meaning closing hand
-    elif (time.time() - loop_timestamp) < 18:
-        point_to_grasp()
-        if event_log[-1].task != 'CLOSE':
-            event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='CLOSE'))
-
-   #Circle for resting that counts for opening hand
-    elif (time.time() - loop_timestamp) < 21:
-        pygame.draw.circle(screen, BLACK, (WIDTH/2, HEIGHT/2), 100)
-        if event_log[-1].task != 'OPEN':
-            event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='OPEN'))
-   
-    # Once one trial complete, check for more
-    elif trial_count < TOTAL_TRIALS:
-        loop_timestamp = time.time()
-        intro_passed = True
-        trial_count += 1
-    # Otherwise exit the loop
-    else:
-        running = False
-    pygame.display.flip()
-
-    # Check for events such as exiting or clicking a key
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        # Arrow pointing right
+        elif (time.time() - loop_timestamp) < 9:
+            point_right()
+            if event_log[-1].task != 'RIGHT':
+                event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='RIGHT'))
+       
+       # Arrow pointing up
+        elif (time.time() - loop_timestamp) < 12:
+            point_up()
+            if event_log[-1].task != 'UP':
+                event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='UP'))
+       
+        # Arrow pointing down
+        elif (time.time() - loop_timestamp) < 15:
+            point_down()
+            if event_log[-1].task != 'DOWN':
+                event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='DOWN'))
+            # Arrow pointing grasp
+        elif (time.time() - loop_timestamp) < 21:
+            point_to_grasp()
+            if event_log[-1].task != 'GRASP':
+                event_log.append(Event(timestamp=time.time(), event_type='TASK_CHANGE', task='GRASP'))
+        # Once one trial complete, check for more
+        elif trial_count < TOTAL_TRIALS:
+            loop_timestamp = time.time()
+            intro_passed = True
+            trial_count += 1
+        # Otherwise exit the loop
+        else:
             running = False
+        pygame.display.flip()
+
+        # Check for events such as exiting or clicking a key
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+    except:
+        print("Error")
+        break
 
 event_log.append(Event(timestamp=0, event_type='END_OF_TRIAL'))
 
@@ -170,5 +166,5 @@ board.stop_stream()
 
 ## SAVE FILE
 
-with open('motion_gui_logs.pickle', 'wb') as handle:
+with open('motion_gui_logs_darren_3.pickle', 'wb') as handle:
     pickle.dump({'EVENT_LOG': event_log, 'DATA_LOG': data_log}, handle)
