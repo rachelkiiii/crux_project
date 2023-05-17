@@ -1,3 +1,6 @@
+"""
+
+
 import pickle
 
 def find_task(timestamp, event_logs):
@@ -18,3 +21,11 @@ def consolidate_data():
     event_logs = all_logs['events']
     for data_log in data_logs:
     	task = find_task(data_log.timestamp, event_logs)
+"""
+
+import pickle
+
+with open('motion_gui_logs.pickle', 'rb') as f:
+	data = pickle.load(f)['DATA_LOG']
+	for chunk in data:
+		time = chunk['data']
