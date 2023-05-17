@@ -1,31 +1,31 @@
-"""
-
-
 import pickle
+import numpy as np
+import pandas as pd
 
-def find_task(timestamp, event_logs):
-	for i in range(len(event_logs)):
-		if event_logs[i].timestamp > timestamp:
-			return event_logs[i-1].timestamp, event_logs[i].timestamp
+import matplotlib.pyplot as plt
 
-def consolidate_data():
-	all_events = {'left': [],
-						'right': [],
-						'up': [],
-						'down': [],
-						'grasp': []
-						'rest': []}
-	with open('motion_gui_logs', 'rb') as f:
-    	all_logs = pickle.load(f)
-    data_logs = all_logs['data']
-    event_logs = all_logs['events']
-    for data_log in data_logs:
-    	task = find_task(data_log.timestamp, event_logs)
-"""
+event_log = {}
 
-import pickle
+left = np.array([])
+right = np.array([])
 
-with open('motion_gui_logs.pickle', 'rb') as f:
-	data = pickle.load(f)['DATA_LOG']
-	for chunk in data:
-		time = chunk['data']
+with open('motion_gui_logs_darren.pickle', 'rb') as f:
+    file = pickle.load(f)
+    
+    for event in file['EVENT_LOG']:
+        event_data = vars(event)
+        event_log[event_data['timestamp']] = event_data['task']
+    
+    read_data = file['DATA_LOG']
+    for chunk in read_data:
+        if event_log[chunk['time']] == 'LEFT':
+            if left.size:
+                left = np.concatenate((left, chunk['data'][:8]), axis=1)
+            else:
+                left = chunk['data'][:8]
+        elif event_log[chunk['time']] == 'RIGHT':
+            if right.size:
+                right = np.concatenate((right, chunk['data'][:8]), axis=1)
+            else:
+                right = chunk['data'][:8]
+
